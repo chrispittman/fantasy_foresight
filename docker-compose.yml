@@ -1,0 +1,32 @@
+version: '3.4'
+
+services:
+  web:
+    build: .
+    volumes:
+      - ./web:/var/www/html
+    environment:
+      DB_HOST: 'db'
+      DB_DATABASE: 'ff'
+      DB_USERNAME: 'ff'
+      DB_PASSWORD: 'ff'
+    links:
+      - "db:db"
+    ports:
+      - '${HTTP_EXPOSED_PORT:-8080}:80'
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_DATABASE: 'ff'
+      MYSQL_USER: 'ff'
+      MYSQL_PASSWORD: 'ff'
+      MYSQL_ROOT_PASSWORD: 'ff'
+    ports:
+      - '${DB_EXPOSED_PORT:-13307}:3306'
+    expose:
+      - '3306'
+    volumes:
+      - dbdata:/var/lib/mysql
+
+volumes:
+  dbdata:
