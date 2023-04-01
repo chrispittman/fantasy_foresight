@@ -11,7 +11,9 @@ class AppController extends Controller
 {
     public function getDashboard() {
         $channels = DiscordChannel::where('user_id', auth()->user()->id)->get();
-        $posts = Post::where('user_id', auth()->user()->id)->get();
+        $posts = Post::where('user_id', auth()->user()->id)
+            ->orderBy('category')->orderBy('id')
+            ->get();
         return view('dashboard', [
             'discord_channels' => $channels,
             'posts' => $posts,
@@ -38,6 +40,9 @@ class AppController extends Controller
         $response = $client->post($channel->webhook_url, [
             \GuzzleHttp\RequestOptions::JSON => $data
         ]);
+
+        $post->sent = true;
+        $post->save();
 
         return redirect('/dashboard');
 

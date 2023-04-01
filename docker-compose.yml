@@ -27,6 +27,12 @@ services:
       - '3306'
     volumes:
       - dbdata:/var/lib/mysql
+  phpmyadmin:
+    image: phpmyadmin
+    ports:
+      - '${PMA_EXPOSED_PORT:-8081}:80'
+    links:
+      - 'db:db'
 
 volumes:
   dbdata:

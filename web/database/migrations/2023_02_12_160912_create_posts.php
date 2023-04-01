@@ -18,6 +18,9 @@ return new class extends Migration
             $table->bigInteger('user_id')->unsigned();
             $table->text('text')->nullable();
             $table->string('img_url', 255)->nullable();
+            $table->string('link_url', 255)->nullable();
+            $table->string('category', 255)->nullable();
+            $table->boolean('sent')->default(false);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

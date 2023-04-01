@@ -1,9 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
+            {{ config('app.name') }}
         </h2>
     </x-slot>
+
+    <script>
+        function openIncog(url) {
+            alert(url);
+        }
+    </script>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -19,16 +25,28 @@
                         </select>
                         <hr>
                         <table border="1">
-                            @foreach ($posts as $post)
+                            @foreach ($posts->groupBy(fn ($item) => $item->category ) as $category=>$cat_posts)
+                                <tr><td colspan="4"><h3 class="font-bold">{{$category}}</h3></td></tr>
+                                @foreach ($cat_posts as $post)
                                 <tr>
+                                    <td>@if ($post->sent)
+                                            ✅
+                                    @endif</td>
+                                    @if ($post->link_url)
+                                        <td><button type="button" onClick="openIncog('{{$post->link_url}}')">🔗</button></td>
+                                        <td>{{$post->text}}</td>
+                                        <td></td>
+                                    @else
                                     <td><input type="radio" name="post_id" value="{{$post->id}}"></td>
                                     <td>{{$post->text}}</td>
                                     <td>{{$post->image_url}}</td>
+                                    @endif
                                 </tr>
+                                @endforeach
                             @endforeach
                         </table>
                         <hr>
-                        <button type="submit">Post to Discord</button>
+                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Post to Discord</button>
                     </form>
                 </div>
             </div>
