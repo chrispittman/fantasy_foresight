@@ -12,11 +12,16 @@ class AppController extends Controller
     public function getDashboard() {
         $channels = DiscordChannel::where('user_id', auth()->user()->id)->get();
         $posts = Post::where('user_id', auth()->user()->id)
-            ->orderBy('category')->orderBy('id')
-            ->get();
+            ->orderBy('category')->orderBy('id');
+        if (session()->has('category')) {
+            $posts = $posts->where('category', session()->get('category'));
+        }
+        $posts = $posts->get();
+        $categories = Post::pluck('category')->unique();
         return view('dashboard', [
             'discord_channels' => $channels,
             'posts' => $posts,
+            'categories' => $categories,
         ]);
     }
 
@@ -46,5 +51,14 @@ class AppController extends Controller
 
         return redirect('/dashboard');
 
+    }
+
+    public function postChooseCategory() {
+        dd(request()->get('category'), session()->all());
+        if (request()->get('category') === 'all') {
+            session()->forget('category');
+        }
+        session('category', request()->get('category'));
+        return redirect('/dashboard');
     }
 }

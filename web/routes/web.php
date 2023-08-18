@@ -20,6 +20,7 @@ Route::get('/', function () {
 
 Route::middleware(['auth','verified'])->controller(\App\Http\Controllers\AppController::class)->group(function () {
     Route::get('/dashboard', 'getDashboard')->name('dashboard');
+    Route::post('/choose_category', 'postChooseCategory');
     Route::post('/post', 'post');
 });
 

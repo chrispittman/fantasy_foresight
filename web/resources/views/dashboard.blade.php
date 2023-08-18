@@ -15,6 +15,17 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
+                    <form method="post" action="/choose_category">
+                        @csrf
+                        Category:
+                        <select name="category">
+                            <option value="all">All</option>
+                            @foreach ($categories as $cat)
+                            <option>{{$cat}}</option>
+                            @endforeach
+                        </select>
+                        <button type="submit">Change Category</button>
+                    </form>
                     <form method="post" action="/post">
                         @csrf
                         Channel:
@@ -39,7 +50,11 @@
                                     @else
                                     <td><input type="radio" name="post_id" value="{{$post->id}}"></td>
                                     <td>{{$post->text}}</td>
-                                    <td>{{$post->image_url}}</td>
+                                    <td>
+@if (!$post->sent)
+                                       <img src="{{$post->img_url}}" height="150" width="150">
+@endif
+                                    </td>
                                     @endif
                                 </tr>
                                 @endforeach
