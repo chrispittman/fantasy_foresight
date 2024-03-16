@@ -54,11 +54,11 @@ class AppController extends Controller
     }
 
     public function postChooseCategory() {
-        dd(request()->get('category'), session()->all());
         if (request()->get('category') === 'all') {
             session()->forget('category');
+        } else {
+            session()->put('category', request()->get('category'));
         }
-        session('category', request()->get('category'));
         return redirect('/dashboard');
     }
 }
